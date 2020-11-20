@@ -137,8 +137,8 @@ class Messari:
 
         :return: JSON response
         """
-        # TODO
-        pass
+        path = '/api/v1/markets'
+        return self._get(path)
 
     def get_market_timeseries(self, market_key, metric_id):
         """
@@ -152,8 +152,8 @@ class Messari:
                             at https://data.messari.io/api/assets/metrics.
         :return: JSON response
         """
-        # TODO
-        pass
+        path = '/api/v1/markets/{}/metrics/{}/time-series'.format(market_key, metric_id)
+        return self._get(path)
 
     def get_all_news(self):
         """
@@ -163,17 +163,17 @@ class Messari:
 
         :return: JSON response
         """
-        # TODO
-        pass
+        path = '/api/v1/news'
+        return self._get(path)
 
     def get_news_for_asset(self, asset_key):
         """
         Get the latest (paginated) news and analysis for all assets.
 
-        Endpoint: GET /api/v1/news
+        Endpoint: GET /api/v1/news/{asset_key}
 
         :param asset_key: This "key" can be the asset's ID (unique), slug (unique), or symbol (non-unique)
         :return: JSON response
         """
-        # TODO
-        pass
+        path = '/api/v1/news/{}'.format(asset_key)
+        return self._get(path)
