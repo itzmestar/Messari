@@ -33,7 +33,7 @@ class Messari:
         :param data: JSON-encoded string payload for POST
         :return: dict/list: JSON response
         """
-        url = self.url + endpoint
+        url = BASE_URL + endpoint
         r = self.session.request(method, url, params=params,
                                  data=data, timeout=30)
         return r.json()
@@ -82,12 +82,12 @@ class Messari:
     def get_asset_metrics(self, asset_key):
         """
         Get all of our quantitative metrics for an asset.
-        Endpoint: GET /api/v2/assets/{assetKey}/metrics
+        Endpoint: GET /api/v1/assets/{assetKey}/metrics
 
         :param asset_key: This "key" can be the asset's ID (unique), slug (unique), or symbol (non-unique)
         :return: JSON response
         """
-        path = '/api/v2/assets/{}/metrics'.format(asset_key)
+        path = '/api/v1/assets/{}/metrics'.format(asset_key)
         return self._get(path)
 
     def get_asset_market_data(self, asset_key):
@@ -95,12 +95,12 @@ class Messari:
         Get the latest market data for an asset.
         This data is also included in the metrics endpoint,
         but if all you need is market-data, use this.
-        Endpoint: GET /api/v2/assets/{assetKey}/metrics/market-data
+        Endpoint: GET /api/v1/assets/{assetKey}/metrics/market-data
 
         :param asset_key: This "key" can be the asset's ID (unique), slug (unique), or symbol (non-unique)
         :return: JSON response
         """
-        path = '/api/v2/assets/{}/metrics/market-data'.format(asset_key)
+        path = '/api/v1/assets/{}/metrics/market-data'.format(asset_key)
         return self._get(path)
 
     def list_asset_timeseries_metric_ids(self):
