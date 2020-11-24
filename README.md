@@ -41,34 +41,69 @@ messari = Messari(key='xxxxxxxxxxxxxxx')
 # Get the paginated list of all assets and their metrics and profiles.
 resp = messari.get_all_assets()
 
+# Use query parameters
+query = {
+    'with-profiles': True,
+    'with-metrics': True,
+    'fields': 'id,slug,symbol,metrics/market_data/price_usd'
+}
+resp = messari.get_all_assets(**query)
+
+# set filter fields
+fields='symbol,name,slug'
+
 # Get basic metadata for an asset.
-resp = messari.get_asset(asset_key='btc')
+resp = messari.get_asset(asset_key='btc', fields=fields)
 
 # Get all of our qualitative information for an asset.
-resp = messari.get_asset_profile(asset_key='btc')
+fields='symbol,name,profile/general/overview/project_details'
+resp = messari.get_asset_profile(asset_key='btc', fields=fields)
 
 # Get all of our quantitative metrics for an asset.
-resp = messari.get_asset_metrics(asset_key='btc')
+fields = 'id,slug,symbol,market_data/price_usd,market_data/volume_last_24_hours'
+resp = messari.get_asset_metrics(asset_key='btc', fields=fields)
 
 # Get the latest market data for an asset.
-resp = messari.get_asset_market_data(asset_key='btc')
+fields = 'id,slug,symbol,market_data/price_usd,market_data/volume_last_24_hours'
+resp = messari.get_asset_market_data(asset_key='btc', fields=fields)
 
 # Lists all of the available timeseries metric IDs for assets.
 resp = messari.list_asset_timeseries_metric_ids()
 
 # Retrieve historical timeseries data for an asset.
-resp = messari.get_asset_timeseries(asset_key='bitcoin', metric_id='price')
+query_params = {
+    'start': '2020-01-01',
+    'end': '2020-02-01',
+    'interval': '1d',
+    'columns': 'open,close',
+    'order': 'ascending',
+    'format': 'json',
+    'timestamp-format': 'rfc3339'
+}
+resp = messari.get_asset_timeseries(asset_key='bitcoin', metric_id='price', **query_params)
 
 # Get the list of all exchanges and pairs that our WebSocket-based
 # market real-time market data API supports.
-resp = messari.get_all_markets()
+fields = 'exchange_name,pair,last_trade_at'
+resp = messari.get_all_markets(fields=fields)
 
 # Retrieve historical timeseries data for a market.
-resp = messari.get_market_timeseries(market_key='binance-btc-usdt', metric_id='price')
+query_params = {
+    'start': '2020-01-01',
+    'end': '2020-03-01',
+    'interval': '1d',
+    'columns': 'open,close',
+    'order': 'ascending',
+    'format': 'json',
+    'timestamp-format': 'rfc3339'
+}
+resp = messari.get_market_timeseries(market_key='binance-btc-usdt', metric_id='price', **query_params)
 
 # Get the latest (paginated) news and analysis for all assets.
-resp = messari.get_all_news()
+fields='title,content'
+resp = messari.get_all_news(fields=fields)
 
 # Get the latest (paginated) news and analysis for all assets.
-resp = messari.get_news_for_asset(asset_key='btc')
+fields='title,content'
+resp = messari.get_news_for_asset(asset_key='btc', fields=fields)
 ```
