@@ -4,11 +4,11 @@ from time import sleep
 
 
 @pytest.fixture(scope='module')
-def client():
+def messari():
     return Messari()
 
 
-@pytest.mark.usefixtures('client')
+@pytest.mark.usefixtures('messari')
 class TestMessari:
     """
     Test Messari class
@@ -18,8 +18,8 @@ class TestMessari:
     def teardown_method():
         sleep(3)  # Avoid rate limit: 20 requests per minute
 
-    def test_get_all_assets(self, client):
-        response = client.get_all_assets()
+    def test_get_all_assets(self, messari):
+        response = messari.get_all_assets()
         assert type(response) == dict
         if 'data' in response:
             assert type(response['data']) == list
@@ -42,8 +42,8 @@ class TestMessari:
     ]
 
     @pytest.mark.parametrize("asset_key,expected_key,expected_val", test_data)
-    def test_get_asset(self, client, asset_key, expected_key, expected_val):
-        response = client.get_asset(asset_key)
+    def test_get_asset(self, messari, asset_key, expected_key, expected_val):
+        response = messari.get_asset(asset_key)
         assert type(response) == dict
         if 'data' in response:
             assert expected_key in response['data']
@@ -52,9 +52,9 @@ class TestMessari:
             assert expected_key in response['status']
             assert expected_val == response['status'][expected_key]
 
-    def test_get_asset_profile(self, client):
+    def test_get_asset_profile(self, messari):
         fields = 'symbol,name,profile/general/overview/project_details'
-        response = client.get_asset_profile(asset_key='btc', fields=fields)
+        response = messari.get_asset_profile(asset_key='btc', fields=fields)
         assert type(response) == dict
         if 'data' in response:
             assert type(response['data']) == dict
@@ -71,9 +71,40 @@ class TestMessari:
             assert "error_code" in response
             assert "error_message" in response
 
-    def test_get_asset_metrics(self, client):
+    def test_get_asset_metrics(self, messari):
+        fields = 'id,slug,symbol,market_data/price_usd,all_time_high/price,blockchain_stats_24_hours/transaction_volume'
+        response = messari.get_asset_metrics(asset_key='btc', fields=fields)
+        assert type(response) == dict
+        if 'data' in response:
+            assert type(response['data']) == dict
+            assert "id" in response['data']
+            assert "symbol" in response['data']
+            assert "slug" in response['data']
+
+            assert "name" not in response['data']
+            assert "metrics" not in response['data']
+            assert "profile" not in response['data']
+            assert "supply" not in response['data']
+
+            assert "market_data" in response['data']
+            assert "price_usd" in response['data']['market_data']
+            assert "price_btc" not in response['data']['market_data']
+            assert "volume_last_24_hours" not in response['data']['market_data']
+
+            assert "all_time_high" in response['data']
+            assert "price" in response['data']['all_time_high']
+            assert "days_since" not in response['data']['all_time_high']
+
+            assert "blockchain_stats_24_hours" in response['data']
+            assert "transaction_volume" in response['data']['blockchain_stats_24_hours']
+            assert "sum_of_fees" not in response['data']['blockchain_stats_24_hours']
+        else:
+            assert "error_code" in response
+            assert "error_message" in response
+
+    def test_get_asset_market_data(self, messari):
         fields = 'id,slug,symbol,market_data/price_usd,market_data/volume_last_24_hours'
-        response = client.get_asset_metrics(asset_key='btc', fields=fields)
+        response = messari.get_asset_market_data(asset_key='btc', fields=fields)
         assert type(response) == dict
         if 'data' in response:
             assert type(response['data']) == dict
@@ -93,30 +124,54 @@ class TestMessari:
             assert "error_code" in response
             assert "error_message" in response
 
-    def test_get_asset_market_data(self, client):
+    def test_list_asset_timeseries_metric_ids(self, messari):
+        response = messari.list_asset_timeseries_metric_ids()
+        assert type(response) == dict
+        if 'data' in response:
+            assert type(response['data']) == dict
+            assert "metrics" in response['data']
+            assert type(response['data']['metrics']) == list
+            if len(response['data']['metrics']) > 0:
+                assert 'metric_id' in response['data']['metrics'][0]
+                assert 'description' in response['data']['metrics'][0]
+                assert 'values_schema' in response['data']['metrics'][0]
+                assert 'minimum_interval' in response['data']['metrics'][0]
+                assert 'source_attribution' in response['data']['metrics'][0]
+        else:
+            assert "error_code" in response
+            assert "error_message" in response
+
+    def test_get_asset_timeseries(self, messari):
+        query_params = {
+            'start': '2021-01-01',
+            'end': '2021-02-01',
+            'interval': '1d',
+            'columns': 'open,close',
+            'order': 'ascending',
+            'format': 'json',
+            'timestamp-format': 'rfc3339'
+        }
+        response = messari.get_asset_timeseries(asset_key='bitcoin', metric_id='price', **query_params)
+        assert type(response) == dict
+        if 'data' in response:
+            # TODO
+            pass
+        else:
+            assert "error_code" in response
+            assert "error_message" in response
+
+    def test_get_all_markets(self, messari):
         # TODO
         assert True
 
-    def test_list_asset_timeseries_metric_ids(self, client):
+    def test_get_market_timeseries(self, messari):
         # TODO
         assert True
 
-    def test_get_asset_timeseries(self, client):
+    def test_get_all_news(self, messari):
         # TODO
         assert True
 
-    def test_get_all_markets(self, client):
-        # TODO
-        assert True
-
-    def test_get_market_timeseries(self, client):
-        # TODO
-        assert True
-
-    def test_get_all_news(self, client):
-        # TODO
-        assert True
-
-    def test_get_news_for_asset(self, client):
+    def test_get_news_for_asset(self, messari):
         # TODO
         assert True

@@ -82,12 +82,12 @@ query_params = {
     'format': 'json',
     'timestamp-format': 'rfc3339'
 }
-resp = messari.get_asset_timeseries(asset_key='bitcoin', metric_id='price', **query_params)
+response = messari.get_asset_timeseries(asset_key='bitcoin', metric_id='price', **query_params)
 
 # Get the list of all exchanges and pairs that our WebSocket-based
 # market real-time market data API supports.
 fields = 'exchange_name,pair,last_trade_at'
-resp = messari.get_all_markets(fields=fields)
+response = messari.get_all_markets(fields=fields)
 
 # Retrieve historical timeseries data for a market.
 query_params = {
@@ -99,13 +99,13 @@ query_params = {
     'format': 'json',
     'timestamp-format': 'rfc3339'
 }
-resp = messari.get_market_timeseries(market_key='binance-btc-usdt', metric_id='price', **query_params)
+response = messari.get_market_timeseries(market_key='binance-btc-usdt', metric_id='price', **query_params)
 
 # Get the latest (paginated) news and analysis for all assets.
 fields='title,content'
-resp = messari.get_all_news(fields=fields)
+response = messari.get_all_news(fields=fields)
 
 # Get the latest (paginated) news and analysis for all assets.
 fields='title,content'
-resp = messari.get_news_for_asset(asset_key='btc', fields=fields)
+response = messari.get_news_for_asset(asset_key='btc', fields=fields)
 ```
