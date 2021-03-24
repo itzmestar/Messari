@@ -53,12 +53,45 @@ class TestMessari:
             assert expected_val == response['status'][expected_key]
 
     def test_get_asset_profile(self, client):
-        # TODO
-        assert True
+        fields = 'symbol,name,profile/general/overview/project_details'
+        response = client.get_asset_profile(asset_key='btc', fields=fields)
+        assert type(response) == dict
+        if 'data' in response:
+            assert type(response['data']) == dict
+            assert "id" not in response['data']
+            assert "symbol" in response['data']
+            assert "name" in response['data']
+            assert "slug" not in response['data']
+            assert "metrics" not in response['data']
+            assert "profile" in response['data']
+            assert "project_details" in response['data']['profile']['general']['overview']
+            assert "is_verified" not in response['data']['profile']['general']['overview']
+            assert "contributors" not in response['data']['profile']
+        else:
+            assert "error_code" in response
+            assert "error_message" in response
 
     def test_get_asset_metrics(self, client):
-        # TODO
-        assert True
+        fields = 'id,slug,symbol,market_data/price_usd,market_data/volume_last_24_hours'
+        response = client.get_asset_metrics(asset_key='btc', fields=fields)
+        assert type(response) == dict
+        if 'data' in response:
+            assert type(response['data']) == dict
+            assert "id" in response['data']
+            assert "symbol" in response['data']
+            assert "name" not in response['data']
+            assert "slug" in response['data']
+            assert "metrics" not in response['data']
+            assert "profile" not in response['data']
+            assert "market_data" in response['data']
+            assert "price_usd" in response['data']['market_data']
+            assert "volume_last_24_hours" in response['data']['market_data']
+            assert "price_btc" not in response['data']['market_data']
+            assert "supply" not in response['data']
+            assert "all_time_high" not in response['data']
+        else:
+            assert "error_code" in response
+            assert "error_message" in response
 
     def test_get_asset_market_data(self, client):
         # TODO
