@@ -41,7 +41,7 @@ from messari import Messari
 messari = Messari(key='xxxxxxxxxxxxxxx')
 
 # Get the paginated list of all assets and their metrics and profiles.
-resp = messari.get_all_assets()
+response = messari.get_all_assets()
 
 # Use query parameters
 query = {
@@ -49,28 +49,28 @@ query = {
     'with-metrics': True,
     'fields': 'id,slug,symbol,metrics/market_data/price_usd'
 }
-resp = messari.get_all_assets(**query)
+response = messari.get_all_assets(**query)
 
 # set filter fields
 fields='symbol,name,slug'
 
 # Get basic metadata for an asset.
-resp = messari.get_asset(asset_key='btc', fields=fields)
+response = messari.get_asset(asset_key='btc', fields=fields)
 
 # Get all of our qualitative information for an asset.
 fields='symbol,name,profile/general/overview/project_details'
-resp = messari.get_asset_profile(asset_key='btc', fields=fields)
+response = messari.get_asset_profile(asset_key='btc', fields=fields)
 
 # Get all of our quantitative metrics for an asset.
 fields = 'id,slug,symbol,market_data/price_usd,market_data/volume_last_24_hours'
-resp = messari.get_asset_metrics(asset_key='btc', fields=fields)
+response = messari.get_asset_metrics(asset_key='btc', fields=fields)
 
 # Get the latest market data for an asset.
 fields = 'id,slug,symbol,market_data/price_usd,market_data/volume_last_24_hours'
-resp = messari.get_asset_market_data(asset_key='btc', fields=fields)
+response = messari.get_asset_market_data(asset_key='btc', fields=fields)
 
 # Lists all of the available timeseries metric IDs for assets.
-resp = messari.list_asset_timeseries_metric_ids()
+response = messari.list_asset_timeseries_metric_ids()
 
 # Retrieve historical timeseries data for an asset.
 query_params = {
