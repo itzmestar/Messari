@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*- #
+"""This provides the Messari class implementation which acts as
+Messari's Crypto Data API client."""
+
 import requests
 
 # --------- Constants --------- #
@@ -34,9 +37,9 @@ class Messari:
         :return: dict/list: JSON response
         """
         url = BASE_URL + endpoint
-        r = self.session.request(method, url, params=params,
+        response = self.session.request(method, url, params=params,
                                  data=data, timeout=30)
-        return r.json()
+        return response.json()
 
     def _get(self, endpoint, params=None):
         """
@@ -75,8 +78,10 @@ class Messari:
         Get basic metadata for an asset.
         Endpoint: GET /api/v1/assets/{assetKey}
 
-        :param asset_key: This "key" can be the asset's ID (unique), slug (unique), or symbol (non-unique)
-        :param fields: string: pare down the returned fields (comma , separated, drill down with a slash /)
+        :param asset_key: This "key" can be the asset's ID (unique), slug (unique),
+                or symbol (non-unique)
+        :param fields: string: pare down the returned fields (comma , separated,
+                drill down with a slash /)
                         example: fields='id,slug,symbol,metrics/market_data/price_usd'
         :return: JSON response
         """
@@ -91,8 +96,10 @@ class Messari:
         Get all of our qualitative information for an asset.
         Endpoint: GET /api/v2/assets/{assetKey}/profile
 
-        :param asset_key: This "key" can be the asset's ID (unique), slug (unique), or symbol (non-unique)
-        :param fields: string: pare down the returned fields (comma , separated, drill down with a slash /)
+        :param asset_key: This "key" can be the asset's ID (unique), slug (unique),
+                or symbol (non-unique)
+        :param fields: string: pare down the returned fields (comma , separated,
+                drill down with a slash /)
                         example: fields='id,slug,symbol,metrics/market_data/price_usd'
         :return: JSON response
         """
@@ -109,8 +116,10 @@ class Messari:
         Get all of our quantitative metrics for an asset.
         Endpoint: GET /api/v1/assets/{assetKey}/metrics
 
-        :param asset_key: This "key" can be the asset's ID (unique), slug (unique), or symbol (non-unique)
-        :param fields: string: pare down the returned fields (comma , separated, drill down with a slash /)
+        :param asset_key: This "key" can be the asset's ID (unique), slug (unique),
+                or symbol (non-unique)
+        :param fields: string: pare down the returned fields (comma , separated,
+                drill down with a slash /)
                         example: fields='id,slug,symbol,metrics/market_data/price_usd'
         :return: JSON response
         """
@@ -128,8 +137,10 @@ class Messari:
         but if all you need is market-data, use this.
         Endpoint: GET /api/v1/assets/{assetKey}/metrics/market-data
 
-        :param asset_key: This "key" can be the asset's ID (unique), slug (unique), or symbol (non-unique)
-        :param fields: string: pare down the returned fields (comma , separated, drill down with a slash /)
+        :param asset_key: This "key" can be the asset's ID (unique), slug (unique),
+                or symbol (non-unique)
+        :param fields: string: pare down the returned fields (comma , separated,
+                drill down with a slash /)
                         example: fields='id,slug,symbol,metrics/market_data/price_usd'
         :return: JSON response
         """
@@ -159,7 +170,8 @@ class Messari:
 
         Endpoint: GET /api/v1/assets/{assetKey}/metrics/{metric_id}/time-series
 
-        :param asset_key: This "key" can be the asset's ID (unique), slug (unique), or symbol (non-unique)
+        :param asset_key: This "key" can be the asset's ID (unique), slug (unique),
+                or symbol (non-unique)
         :param metric_id: specifies which timeseries will be returned.
         :param query_params: dict of query parameters to filter the list
         :return: JSON response
@@ -173,7 +185,8 @@ class Messari:
         market real-time market data API supports.
         Endpoint: GET /api/v1/markets
 
-        :param fields: string: pare down the returned fields (comma , separated, drill down with a slash /)
+        :param fields: string: pare down the returned fields (comma , separated,
+                drill down with a slash /)
                         example: fields='id,slug,symbol,metrics/market_data/price_usd'
         :return: JSON response
         """
@@ -190,10 +203,11 @@ class Messari:
 
         Endpoint: GET /api/v1/markets/{assetKey}/metrics/{metric_id}/time-series
 
-        :param market_key: This "key" can be the asset's ID (unique), slug (unique), or symbol (non-unique)
-        :param metric_id: The metricID is a unique identifier which determines which columns are returned
-                            by time-series endpoints. For a list of valid metric ids, check the API response
-                            at https://data.messari.io/api/assets/metrics.
+        :param market_key: This "key" can be the asset's ID (unique), slug (unique),
+                or symbol (non-unique)
+        :param metric_id: The metricID is a unique identifier which determines which
+                columns are returned by time-series endpoints. For a list of valid
+                metric ids, check the API response at https://data.messari.io/api/assets/metrics.
         :param query_params: dict of query parameters to filter the list
         :return: JSON response
         """
@@ -206,8 +220,10 @@ class Messari:
 
         Endpoint: GET /api/v1/news
 
-        :param page: Page number, starts at 1. Increment to paginate through results (until result is empty array)
-        :param fields: string: pare down the returned fields (comma , separated, drill down with a slash /)
+        :param page: Page number, starts at 1. Increment to paginate through
+                results (until result is empty array)
+        :param fields: string: pare down the returned fields (comma , separated,
+                drill down with a slash /)
                         example: fields='id,slug,symbol,metrics/market_data/price_usd'
         :return: JSON response
         """
@@ -226,9 +242,12 @@ class Messari:
 
         Endpoint: GET /api/v1/news/{asset_key}
 
-        :param asset_key: This "key" can be the asset's ID (unique), slug (unique), or symbol (non-unique)
-        :param page: Page number, starts at 1. Increment to paginate through results (until result is empty array)
-        :param fields: string: pare down the returned fields (comma , separated, drill down with a slash /)
+        :param asset_key: This "key" can be the asset's ID (unique), slug (unique),
+                or symbol (non-unique)
+        :param page: Page number, starts at 1. Increment to paginate through results
+                (until result is empty array)
+        :param fields: string: pare down the returned fields (comma , separated,
+                drill down with a slash /)
                         example: fields='id,slug,symbol,metrics/market_data/price_usd'
         :return: JSON response
         """
